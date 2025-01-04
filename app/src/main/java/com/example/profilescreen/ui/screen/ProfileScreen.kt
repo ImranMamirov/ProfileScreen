@@ -1,4 +1,4 @@
-package com.example.profilescreen.ui.theme.screen
+package com.example.profilescreen.ui.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -44,7 +44,7 @@ import com.example.profilescreen.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen() {
-    var name by remember { mutableStateOf("Imran Mamirov \nMobile Developer") }
+    var name by remember { mutableStateOf("Imran Mamirov") }
     var aboutMe by remember { mutableStateOf("I am a passionate mobile developer with a strong background in programming languages like Kotlin, Java, and Swift. I have experience in developing cross-platform applications for Android and iOS using the Flutter and Kotlin/Native frameworks.") }
     var isDialogOpen by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf("") }
@@ -72,16 +72,28 @@ fun ProfileScreen() {
         ) {
             ProfileImage()
             Spacer(modifier = Modifier.width(20.dp))
-            Text(
+            Column(
                 modifier = Modifier
-                    .clickable {
-                        dialogType = "name"
-                        isDialogOpen = true
-                    },
-                text = name,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
-            )
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    modifier = Modifier
+                        .clickable {
+                            dialogType = "name"
+                            isDialogOpen = true
+                        },
+                    text = name,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Mobile Developer",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
         }
         Spacer(modifier = Modifier.height(16.dp))
         BoldText(text = "About me")
@@ -103,12 +115,14 @@ fun ProfileScreen() {
                 initialText = if (dialogType == "name") name else aboutMe,
                 onDismiss = { isDialogOpen = false },
                 onSave = { newText ->
-                    if (dialogType == "name") {
-                        name = newText
-                    } else {
-                        aboutMe = newText
+                    if (newText.isNotBlank()) {
+                        if (dialogType == "name") {
+                            name = newText
+                        } else {
+                            aboutMe = newText
+                        }
+                        isDialogOpen = false
                     }
-                    isDialogOpen = false
                 }
             )
         }
@@ -146,7 +160,8 @@ fun EditTextDialog(
                         .fillMaxWidth(),
                     value = inputText,
                     onValueChange = { inputText = it },
-                    singleLine = false
+                    singleLine = false,
+                    placeholder = { Text(text = "Enter text here...") }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
