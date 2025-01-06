@@ -57,7 +57,10 @@ fun ProfileScreen() {
     ) {
         CenterAlignedTopAppBar(
             title = {
-                Text(text = "Profile")
+                Text(
+                    text = "Profile",
+                    fontWeight = FontWeight.Bold
+                )
             }
         )
 
